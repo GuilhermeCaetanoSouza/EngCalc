@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engenheiro Ágil — Cálculos Técnicos</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="hero">
+        <h1>⚙️ Engenheiro Ágil</h1>
+        <p>Ferramentas de cálculo para fluidos, eletricidade, ângulos e mais — com fundamentos e fórmulas reais.</p>
+    </div>
+
+    <main class="calculos-container">
+        <!-- 1. MECÂNICA DOS FLUIDOS (VAZÃO + BERNOULLI) -->
+        <section class="modulo">
+            <div class="modulo-cabecalho">
+                <h2>💧 Mecânica dos Fluidos</h2>
+                <div class="explicacao">
+                    <p><strong>O que é?</strong> Estuda o comportamento de líquidos e gases em movimento ou repouso. Essencial para dimensionar tubulações, bombas e canais.</p>
+                    <p><strong>Por que usar?</strong> Permite calcular vazões, perdas de carga e energias envolvidas, garantindo eficiência e segurança em sistemas hidráulicos.</p>
+                    <div class="formula-destaque">
+                        <strong>📐 Fórmula da Vazão Volumétrica:</strong> Q = A · v<br>
+                        <strong>📐 Equação de Bernoulli (energia):</strong> P₁ + ½ρv₁² + ρgz₁ = P₂ + ½ρv₂² + ρgz₂
+                    </div>
+                </div>
+                <button class="btn-abrir" data-modulo="fluidos">📐 Abrir calculadora de fluidos</button>
+            </div>
+            <div class="calculadora hidden" id="calc-fluidos">
+                <div class="calc-tabs">
+                    <button class="tab-btn active" data-tab="vazao">Vazão (Q)</button>
+                    <button class="tab-btn" data-tab="bernoulli">Bernoulli (v₂)</button>
+                </div>
+                <!-- Aba Vazão -->
+                <div class="tab-content active" id="tab-vazao">
+                    <div class="campo">
+                        <label>Área da seção (m²):</label>
+                        <input type="number" id="area" value="0.05" step="any">
+                    </div>
+                    <div class="campo">
+                        <label>Velocidade do fluido (m/s):</label>
+                        <input type="number" id="velocidade" value="2.5" step="any">
+                    </div>
+                    <div class="campo">
+                        <label>Densidade (kg/m³) — opcional para vazão mássica:</label>
+                        <input type="number" id="densidade" value="1000" step="any">
+                    </div>
+                    <button class="calcular" id="calcVazaoBtn">Calcular vazão</button>
+                    <div class="resultado" id="resultadoVazao">
+                        💧 Q (volumétrica) = <span>---</span> m³/s<br>
+                        ⚖️ Qm (mássica) = <span>---</span> kg/s
+                    </div>
+                </div>
+                <!-- Aba Bernoulli -->
+                <div class="tab-content hidden" id="tab-bernoulli">
+                    <div class="campo"><label>Pressão 1 (Pa):</label><input type="number" id="p1" value="200000"></div>
+                    <div class="campo"><label>Velocidade 1 (m/s):</label><input type="number" id="v1" value="3"></div>
+                    <div class="campo"><label>Altura 1 (m):</label><input type="number" id="z1" value="5"></div>
+                    <hr>
+                    <div class="campo"><label>Pressão 2 (Pa):</label><input type="number" id="p2" value="150000"></div>
+                    <div class="campo"><label>Altura 2 (m):</label><input type="number" id="z2" value="8"></div>
+                    <button class="calcular" id="calcBernoulliBtn">Calcular v₂</button>
+                    <div class="resultado" id="resultadoBernoulli">💨 Velocidade no ponto 2 = <span>---</span> m/s</div>
+                    <div class="nota">ρ = 1000 kg/m³ (água) | g = 9,81 m/s²</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ELETRICIDADE (CORRENTE + QUEDA DE TENSÃO) -->
+        <section class="modulo">
+            <div class="modulo-cabecalho">
+                <h2>⚡ Eletricidade e Condutores</h2>
+                <div class="explicacao">
+                    <p><strong>O que é?</strong> Conjunto de fenômenos envolvendo cargas elétricas. Essencial para dimensionar circuitos, motores e proteger equipamentos.</p>
+                    <p><strong>Por que usar?</strong> A Lei de Ohm (V = R·I) e o cálculo de queda de tensão garantem que os cabos não superaqueçam e que a tensão chegue adequada aos equipamentos.</p>
+                    <div class="formula-destaque">
+                        <strong>Lei de Ohm:</strong> I = V / R &nbsp;|&nbsp; P = V · I<br>
+                        <strong>Queda de tensão CC:</strong> ΔV = 2·ρ·L·I / S
+                    </div>
+                </div>
+                <button class="btn-abrir" data-modulo="eletricidade">🔌 Abrir calculadora elétrica</button>
+            </div>
+            <div class="calculadora hidden" id="calc-eletricidade">
+                <div class="calc-tabs">
+                    <button class="tab-btn active" data-tab="ohm">Lei de Ohm</button>
+                    <button class="tab-btn" data-tab="queda">Queda de tensão</button>
+                </div>
+                <div class="tab-content active" id="tab-ohm">
+                    <div class="campo"><label>Tensão (V):</label><input type="number" id="tensao" value="12"></div>
+                    <div class="campo"><label>Resistência (Ω):</label><input type="number" id="resistencia" value="4"></div>
+                    <button class="calcular" id="calcOhmBtn">Calcular corrente e potência</button>
+                    <div class="resultado" id="resultadoOhm">⚡ Corrente I = <span>---</span> A &nbsp;|&nbsp; Potência P = <span>---</span> W</div>
+                </div>
+                <div class="tab-content hidden" id="tab-queda">
+                    <div class="campo"><label>Corrente (A):</label><input type="number" id="correnteQueda" value="20"></div>
+                    <div class="campo"><label>Comprimento do cabo (m):</label><input type="number" id="comprimento" value="50"></div>
+                    <div class="campo"><label>Seção do condutor (mm²):</label><input type="number" id="secao" value="2.5"></div>
+                    <div class="campo"><label>Material:</label>
+                        <select id="material">
+                            <option value="cobre">Cobre (ρ=0,0172 Ω·mm²/m)</option>
+                            <option value="aluminio">Alumínio (ρ=0,0282)</option>
+                        </select>
+                    </div>
+                    <button class="calcular" id="calcQuedaBtn">Calcular queda ΔV</button>
+                    <div class="resultado" id="resultadoQueda">ΔV = <span>---</span> V &nbsp;|&nbsp; ΔV% = <span>---</span> % (base 127V)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ÂNGULOS E TRIGONOMETRIA -->
+        <section class="modulo">
+            <div class="modulo-cabecalho">
+                <h2>📐 Ângulos e Trigonometria</h2>
+                <div class="explicacao">
+                    <p><strong>O que é?</strong> Medição e conversão de ângulos (graus, radianos, grados) e funções seno, cosseno, tangente — base para topografia, estruturas e ondas.</p>
+                    <p><strong>Por que usar?</strong> Em projetos mecânicos, elétricos (fasores) e civis, ângulos precisos são essenciais. A conversão entre unidades evita erros.</p>
+                    <div class="formula-destaque">
+                        <strong>Conversões:</strong> rad = graus × π/180 &nbsp;|&nbsp; grad = graus × (10/9)<br>
+                        <strong>sen(θ), cos(θ), tan(θ)</strong>
+                    </div>
+                </div>
+                <button class="btn-abrir" data-modulo="angulos">📏 Abrir calculadora de ângulos</button>
+            </div>
+            <div class="calculadora hidden" id="calc-angulos">
+                <div class="campo">
+                    <label>Valor numérico:</label>
+                    <input type="number" id="anguloValor" value="45" step="any">
+                </div>
+                <div class="campo">
+                    <label>Unidade de entrada:</label>
+                    <select id="unidadeEntrada">
+                        <option value="deg">Graus (°)</option>
+                        <option value="rad">Radianos (rad)</option>
+                        <option value="grad">Grados (grad)</option>
+                    </select>
+                </div>
+                <button class="calcular" id="calcAngulosBtn">Converter e calcular trigonometria</button>
+                <div class="resultado" id="resultadoAngulos">
+                    🔹 Graus: <span id="grausRes">---</span><br>
+                    🔸 Radianos: <span id="radRes">---</span><br>
+                    🔹 Grados: <span id="gradRes">---</span><br>
+                    📐 sen = <span id="senRes">---</span> &nbsp; cos = <span id="cosRes">---</span> &nbsp; tan = <span id="tanRes">---</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. EXTRA: DILATAÇÃO TÉRMICA LINEAR -->
+        <section class="modulo">
+            <div class="modulo-cabecalho">
+                <h2>🔥 Dilatação Térmica</h2>
+                <div class="explicacao">
+                    <p><strong>O que é?</strong> Variação no comprimento de materiais devido à mudança de temperatura. Essencial para pontes, trilhos e estruturas metálicas.</p>
+                    <p><strong>Por que usar?</strong> Evita falhas por expansão/contração não previstas. A fórmula ΔL = α · L₀ · ΔT é fundamental.</p>
+                    <div class="formula-destaque">
+                        ΔL = α · L₀ · ΔT &nbsp;&nbsp; (α em °C⁻¹)
+                    </div>
+                </div>
+                <button class="btn-abrir" data-modulo="dilatacao">🌡️ Abrir calculadora de dilatação</button>
+            </div>
+            <div class="calculadora hidden" id="calc-dilatacao">
+                <div class="campo"><label>Comprimento inicial L₀ (m):</label><input type="number" id="L0" value="10"></div>
+                <div class="campo"><label>Variação ΔT (°C):</label><input type="number" id="deltaT" value="40"></div>
+                <div class="campo"><label>Coeficiente α (×10⁻⁶ /°C):</label><input type="number" id="alfa" value="12"></div>
+                <button class="calcular" id="calcDilatacaoBtn">Calcular ΔL</button>
+                <div class="resultado" id="resultadoDilatacao">ΔL = <span>---</span> mm &nbsp;|&nbsp; L final = <span>---</span> mm</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Cálculos baseados em fórmulas clássicas da engenharia. Use unidades compatíveis.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
