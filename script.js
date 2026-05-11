@@ -5,22 +5,21 @@ document.querySelectorAll('.btn-abrir').forEach(btn => {
         const calcDiv = document.getElementById(`calc-${modulo}`);
         if (calcDiv.classList.contains('hidden')) {
             calcDiv.classList.remove('hidden');
-            btn.textContent = btn.textContent.replace('Abrir', 'Fechar');
+            btn.textContent = btn.textContent.replace('Calcular', 'Fechar');
         } else {
             calcDiv.classList.add('hidden');
-            btn.textContent = btn.textContent.replace('Fechar', 'Abrir');
+            btn.textContent = btn.textContent.replace('Fechar', 'Calcular');
         }
     });
 });
 
-// GERENCIAMENTO DE ABAS (dentro de cada calculadora)
+// GERENCIAMENTO DE ABAS
 document.querySelectorAll('.calc-tabs').forEach(tabContainer => {
     const btns = tabContainer.querySelectorAll('.tab-btn');
     const parent = tabContainer.closest('.calculadora');
     btns.forEach(btn => {
         btn.addEventListener('click', () => {
             const tabId = btn.getAttribute('data-tab');
-            // desativa todos os btns e conteúdos do mesmo parent
             btns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             parent.querySelectorAll('.tab-content').forEach(content => {
@@ -32,18 +31,19 @@ document.querySelectorAll('.calc-tabs').forEach(tabContainer => {
     });
 });
 
-// ========== FLUIDOS ==========
-// Vazão
+// 1. FLUIDOS - Vazão
 document.getElementById('calcVazaoBtn')?.addEventListener('click', () => {
     const A = parseFloat(document.getElementById('area').value) || 0;
     const v = parseFloat(document.getElementById('velocidade').value) || 0;
     const rho = parseFloat(document.getElementById('densidade').value) || 0;
     const Q = A * v;
     const Qm = rho * Q;
-    document.querySelector('#resultadoVazao span:first-child').innerText = Q.toFixed(6);
-    document.querySelector('#resultadoVazao span:last-child').innerText = Qm.toFixed(6);
+    const spans = document.querySelectorAll('#resultadoVazao span');
+    spans[0].innerText = Q.toFixed(6);
+    spans[1].innerText = Qm.toFixed(6);
 });
-// Bernoulli
+
+// 1. FLUIDOS - Bernoulli
 document.getElementById('calcBernoulliBtn')?.addEventListener('click', () => {
     const P1 = parseFloat(document.getElementById('p1').value) || 0;
     const v1 = parseFloat(document.getElementById('v1').value) || 0;
@@ -55,15 +55,14 @@ document.getElementById('calcBernoulliBtn')?.addEventListener('click', () => {
     let rightCte = P2 + rho * g * z2;
     let kinetic = left - rightCte;
     if (kinetic < 0) {
-        document.querySelector('#resultadoBernoulli span').innerText = "Impossível (perda de energia)";
+        document.querySelector('#resultadoBernoulli span').innerText = "Impossível (energia diminui)";
         return;
     }
     let v2 = Math.sqrt((2 * kinetic) / rho);
     document.querySelector('#resultadoBernoulli span').innerText = v2.toFixed(3) + " m/s";
 });
 
-// ========== ELETRICIDADE ==========
-// Ohm
+// 2. ELETRICIDADE - Lei de Ohm
 document.getElementById('calcOhmBtn')?.addEventListener('click', () => {
     const V = parseFloat(document.getElementById('tensao').value) || 0;
     const R = parseFloat(document.getElementById('resistencia').value) || 0;
@@ -74,7 +73,8 @@ document.getElementById('calcOhmBtn')?.addEventListener('click', () => {
     spans[0].innerText = I.toFixed(4);
     spans[1].innerText = P.toFixed(4);
 });
-// Queda de tensão
+
+// 2. ELETRICIDADE - Queda de tensão
 document.getElementById('calcQuedaBtn')?.addEventListener('click', () => {
     let I = parseFloat(document.getElementById('correnteQueda').value) || 0;
     let L = parseFloat(document.getElementById('comprimento').value) || 0;
@@ -90,7 +90,7 @@ document.getElementById('calcQuedaBtn')?.addEventListener('click', () => {
     spans[1].innerText = perc.toFixed(2);
 });
 
-// ========== ÂNGULOS ==========
+// 3. ÂNGULOS E TRIGONOMETRIA
 document.getElementById('calcAngulosBtn')?.addEventListener('click', () => {
     let val = parseFloat(document.getElementById('anguloValor').value) || 0;
     let unidade = document.getElementById('unidadeEntrada').value;
@@ -108,7 +108,7 @@ document.getElementById('calcAngulosBtn')?.addEventListener('click', () => {
     document.getElementById('tanRes').innerText = Math.tan(rad).toFixed(6);
 });
 
-// ========== DILATAÇÃO ==========
+// 4. DILATAÇÃO TÉRMICA
 document.getElementById('calcDilatacaoBtn')?.addEventListener('click', () => {
     let L0 = parseFloat(document.getElementById('L0').value) || 0;
     let dT = parseFloat(document.getElementById('deltaT').value) || 0;
@@ -120,8 +120,51 @@ document.getElementById('calcDilatacaoBtn')?.addEventListener('click', () => {
     spans[1].innerText = (Lfinal * 1000).toFixed(2);
 });
 
-// Inicializa com valores padrão (já visíveis nos inputs)
-// Dispara cálculos iniciais automaticamente para mostrar algo
+// 5. CONVERSOR DE PRESSÃO
+document.getElementById('calcPressaoBtn')?.addEventListener('click', () => {
+    let valor = parseFloat(document.getElementById('pressaoValor').value) || 0;
+    const unidade = document.getElementById('pressaoOrigem').value;
+    let valorEmPa = 0;
+    switch(unidade) {
+        case 'Pa': valorEmPa = valor; break;
+        case 'psi': valorEmPa = valor * 6894.76; break;
+        case 'bar': valorEmPa = valor * 1e5; break;
+        case 'atm': valorEmPa = valor * 101325; break;
+    }
+    document.getElementById('paRes').innerText = valorEmPa.toFixed(2);
+    document.getElementById('psiRes').innerText = (valorEmPa / 6894.76).toFixed(4);
+    document.getElementById('barRes').innerText = (valorEmPa / 1e5).toFixed(6);
+    document.getElementById('atmRes').innerText = (valorEmPa / 101325).toFixed(6);
+});
+
+// 6. MOMENTO FLETOR (VIGA)
+document.getElementById('calcMomentoBtn')?.addEventListener('click', () => {
+    let P = parseFloat(document.getElementById('cargaP').value) || 0;
+    let L = parseFloat(document.getElementById('vaoL').value) || 0;
+    let a = parseFloat(document.getElementById('posicaoA').value) || 0;
+    let b = L - a;
+    if (b <= 0 || a < 0 || L <= 0) {
+        document.querySelector('#resultadoMomento span').innerText = "Erro (parâmetros inválidos)";
+        return;
+    }
+    let momento = (P * a * b) / L;
+    document.querySelector('#resultadoMomento span').innerText = momento.toFixed(3);
+});
+
+// 7. HIDROSTÁTICA (TEOREMA DE STEVIAN)
+document.getElementById('calcHidroBtn')?.addEventListener('click', () => {
+    let h = parseFloat(document.getElementById('profundidade').value) || 0;
+    let rho = parseFloat(document.getElementById('densidadeFluido').value) || 0;
+    let incluir = document.getElementById('incluirAtm').value;
+    const g = 9.81;
+    let pManometrica = rho * g * h;
+    let pAtm = 101325;
+    let pAbsoluta = incluir === 'sim' ? pManometrica + pAtm : pManometrica;
+    document.getElementById('pManometrica').innerText = pManometrica.toFixed(2);
+    document.getElementById('pAbsoluta').innerText = pAbsoluta.toFixed(2);
+});
+
+// INICIALIZA COM VALORES PADRÃO
 window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('calcVazaoBtn')?.click();
     document.getElementById('calcBernoulliBtn')?.click();
@@ -129,4 +172,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('calcQuedaBtn')?.click();
     document.getElementById('calcAngulosBtn')?.click();
     document.getElementById('calcDilatacaoBtn')?.click();
+    document.getElementById('calcPressaoBtn')?.click();
+    document.getElementById('calcMomentoBtn')?.click();
+    document.getElementById('calcHidroBtn')?.click();
 });
